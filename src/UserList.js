@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUsers } from './api'; // Import the getUsers function from api.js
+import { getUsers } from './api';
 
 const UserList = () => {
-  const users = useSelector((state) => state.users.userList); // Access the user list from the Redux store
+  const users = useSelector((state) => state.users.userList);
   const dispatch = useDispatch();
+  console.log(users.data)
+const employees = users.data;
+console.log(employees)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getUsers(); // Fetch user data using the getUsers function
-        dispatch({ type: 'SET_USERS', payload: data }); // Dispatch an action to update the user list in the Redux store
+        const data = await getUsers();
+        console.log(data.data)
+        dispatch({ type: 'SET_USERS', payload: data });
       } catch (error) {
         console.log('Error:', error);
       }
@@ -35,7 +39,7 @@ const UserList = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {employees.map((user) => (
               <tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
