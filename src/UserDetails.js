@@ -1,29 +1,51 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { getUserById } from './thunks';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const UserDetails = () => {
-  const { id } = useParams();
-  const user = useSelector((state) => state.users.userList.find((user) => user.id === id));
+  const [id, setId] = useState('');
+  const [employeeInfo, setEmployeeInfo] = useState(null);
+  const [error, setError] = useState(null);
 
-  const dispatch = useDispatch();
+  const fetchEmployeeInfo = async () => {
+    try {
+      const response = await axios.get(`http://3.109.214.83:4000/emplo1`);
+      setEmployeeInfo(response.data);
+      console.log(response.data)
+      setError(null);
+    } catch (error) {
+      console.error(error);
+      setEmployeeInfo(null);
+      setError('Failed to fetch employee information.');
+    }
+  };
 
-  useEffect(() => {
-    dispatch(getUserById(id));
-  }, [dispatch, id]);
+  const handleIdChange = (event) => {
+    setId(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    fetchEmployeeInfo();
+  };
 
   return (
     <div>
-      <h2>User Details</h2>
-      {user ? (
+      <form onSubmit={handleSubmit}>
+        <input type="number" value={id} onChange={handleIdChange} />
+        <button type="submit">Get Employee Details</button>
+      </form>
+
+      {employeeInfo && (
         <div>
-          <p>Name: {user.name}</p>
-          {/* Include other user details here */}
+          <h2>Employee Details</h2>
+          <p>ID: {employeeInfo.id}</p>
+          <p>Name: {employeeInfo.name}</p>
+          <p>Email: {employeeInfo.email}</p>
+          {/* Display other employee details as needed */}
         </div>
-      ) : (
-        <p>Loading...</p>
       )}
+
+      {error && <p>{error}</p>}
     </div>
   );
 };

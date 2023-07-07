@@ -1,10 +1,11 @@
 import React from 'react';
-import {  Routes, Route, Switch } from 'react-router-dom';
+import {  Routes, Route } from 'react-router-dom';
 import UserForm from './UserForm';
 import UserList from './UserList';
 import UserDetails from './UserDetails';
 import UserEdit from './UserEdit';
 import UserDelete from './UserDelete';
+import Nav from './Nav';
 
 const App = () => {
   const handleSubmit = (data) => {
@@ -12,6 +13,8 @@ const App = () => {
     console.log(data);
   };
   return (
+    <div>
+      <Nav/>
     <Routes>
    
         <Route exact path="/" element={<UserForm onSubmit={handleSubmit} />}/>
@@ -26,6 +29,7 @@ const App = () => {
        
    
     </Routes>
+    </div>
   );
 };
 
